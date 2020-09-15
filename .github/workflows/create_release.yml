@@ -25,8 +25,9 @@ jobs:
 
       - name: Test
         shell: bash
-        run: echo "${{ steps.vars.outputs.REV }}"
-        run: echo "${{ steps.vars.outputs.OLD_REV }}"
+        run: |
+          echo "${{ steps.vars.outputs.REV }}"
+          echo "${{ steps.vars.outputs.OLD_REV }}"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
