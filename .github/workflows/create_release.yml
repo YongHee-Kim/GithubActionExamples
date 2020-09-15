@@ -1,0 +1,40 @@
+name: Create Release
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'r*' # Push events to matching v*, i.e. v1.0, v20.15.10
+env: 
+  GLOB_PATTERN: 'r[0-9][0-9][0-9][0-9]'
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      REV: ${{ steps.vars.outputs.REV }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setting Variables
+        id: vars
+        shell: bash
+        run: |
+          REV="$(cut -d'/' -f3 <<< {{ github.ref }})"
+          echo "::set-output name=REV::${REV}"
+          echo "이번 리비전: ${ REV }"
+      - name: Test
+        shell: bash
+        run: echo "${{ jobs.vars.steps.REV }}"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.vars.outputs.REV }}
+          body: |
+            [Diff since ${{ steps.vars.outputs.OLD_REV }}](https://github.com/yongheekim-dev/GithubTagActionTest/compare/${{ steps.vars.outputs.OLD_REV }}...${{ steps.vars.outputs.REV }})
+          draft: false
+          prerelease: false
