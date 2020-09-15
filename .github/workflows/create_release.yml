@@ -21,12 +21,12 @@ jobs:
           ref="$(cut -d'/' -f3 <<< ${{ github.ref }})"
           echo ${ref}
           echo "::set-output name=REV::${ref}"
-          echo "이번 리비전: ${{ REV }}"
           echo "::set-output name=OLD_REV::${ref}"
 
       - name: Test
         shell: bash
         run: echo "${{ steps.vars.outputs.REV }}"
+        run: echo "${{ steps.vars.outputs.OLD_REV }}"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
