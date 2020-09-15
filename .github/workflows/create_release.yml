@@ -20,8 +20,9 @@ jobs:
         id: vars
         shell: bash
         run: |
-          REV="$(cut -d'/' -f3 <<< {{ github.ref }})"
-          echo "::set-output name=REV::${REV}"
+          ref="$(cut -d'/' -f3 <<< {{ github.ref }})"
+          echo ${ref}
+          echo "::set-output name=REV::${ref}"
           echo "이번 리비전: ${ REV }"
       - name: Test
         shell: bash
