@@ -21,7 +21,7 @@ jobs:
           echo "::set-output name=REV::${ref}"
           NUM=$(echo $ref | cut -c2-5)
           echo $NUM
-          NUM=$(( NUM -1 ))
+          NUM=$(expr ${NUM} - 1)
           echo $NUM
           NUM=$(printf "%04d\n" $NUM)
           echo $NUM
