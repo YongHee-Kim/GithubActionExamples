@@ -11,8 +11,6 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
-    outputs:
-      REV: ${{ steps.vars.outputs.REV }}
 
     steps:
       - uses: actions/checkout@v2
