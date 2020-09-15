@@ -19,7 +19,7 @@ jobs:
           ref="$(cut -d'/' -f3 <<< ${{ github.ref }})"
           echo $ref
           echo "::set-output name=REV::${ref}"
-          NUM=$(echo $REV | cut -c2-5)
+          NUM=$(echo $ref | cut -c2-5)
           echo $NUM
           NUM=$(( NUM -1 ))
           echo $NUM
