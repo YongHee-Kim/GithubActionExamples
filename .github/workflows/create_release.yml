@@ -18,13 +18,15 @@ jobs:
         id: vars
         shell: bash
         run: |
-          ref="$(cut -d'/' -f3 <<< {{ github.ref }})"
+          ref="$(cut -d'/' -f3 <<< ${{ github.ref }})"
           echo ${ref}
-          echo "::set-output name=REV::${ref}"
-          echo "이번 리비전: ${ REV }"
+          echo "::set-env name=REV::${ref}"
+          echo "이번 리비전: ${{ REV }}"
+          echo "::set-env name=OLD_REV::${ref}"
+
       - name: Test
         shell: bash
-        run: echo "${{ jobs.vars.steps.REV }}"
+        run: echo "${{ REV }}"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -32,8 +34,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ steps.vars.outputs.REV }}
+          release_name: Release ${{ REV }}
           body: |
-            [Diff since ${{ steps.vars.outputs.OLD_REV }}](https://github.com/yongheekim-dev/GithubTagActionTest/compare/${{ steps.vars.outputs.OLD_REV }}...${{ steps.vars.outputs.REV }})
+            [Diff since ${{ OLD_REV }}](https://github.com/yongheekim-dev/GithubTagActionTest/compare/${{ steps.vars.outputs.OLD_REV }}...${{ REV }})
           draft: false
           prerelease: false
